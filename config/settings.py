@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-0zdxb$8z1uk7)nautf)tboab50*+kwmngk+81a89()dn$g8u*d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["my-storie-api-production.up.railway.app"]
 
 
 # Application definition
