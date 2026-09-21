@@ -97,10 +97,15 @@ database_url = (
 )
 if database_url:
     parsed_database_url = urlparse(database_url)
+    database_name = (
+        parsed_database_url.path.removeprefix("/")
+        or os.getenv("PGDATABASE")
+        or "railway"
+    )
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": parsed_database_url.path.removeprefix("/"),
+            "NAME": database_name,
             "USER": parsed_database_url.username,
             "PASSWORD": parsed_database_url.password,
             "HOST": parsed_database_url.hostname,
