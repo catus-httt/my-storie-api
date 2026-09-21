@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,16 +89,30 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'my_storie_db',
-        'USER': 'my_storie_user',
-        'PASSWORD': '2206',
-        'HOST': 'localhost',
-        'PORT': '5432',
+database_url = os.getenv("DATABASE_URL")
+if database_url:
+    parsed_database_url = urlparse(database_url)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": parsed_database_url.path.removeprefix("/"),
+            "USER": parsed_database_url.username,
+            "PASSWORD": parsed_database_url.password,
+            "HOST": parsed_database_url.hostname,
+            "PORT": parsed_database_url.port or "5432",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "my_storie_db",
+            "USER": "my_storie_user",
+            "PASSWORD": "2206",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
